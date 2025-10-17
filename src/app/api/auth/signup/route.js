@@ -51,13 +51,14 @@ export async function POST(req) {
     );
 
     // Cookie set karo.
-    response.cookies.set("token", token, {
-      httpOnly: true,
-      maxAge: 60 * 60 * 24,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "none", // 🩵 add this line
-      path: "/",
-    });
+response.cookies.set("token", token, {
+  httpOnly: true,
+  maxAge: 60 * 60 * 24,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: "none", // 🩵 add this line
+  path: "/",
+});
+
 
     return response;
   } catch (error) {
