@@ -55,11 +55,12 @@ export default function AuthPage() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch(`/api/auth/login`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify({
           email: formData.email,
           password: formData.password,
@@ -98,11 +99,12 @@ export default function AuthPage() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch(`/api/auth/signup`, {
+     const response = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/auth/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify(formData),
       });
 

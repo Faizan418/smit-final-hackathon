@@ -7,39 +7,29 @@ import jwt from "jsonwebtoken";
 export async function POST(req) {
   try {
     await connectDB();
-    const body = await req.json();
-    const { fullName, email, password } = body;
+    const { fullName, email, password } = await req.json();
 
-    // Check agar user pehle se exist karta hai.
-    const userExist = await User.findOne({ email });
-    if (userExist) {
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
       return NextResponse.json(
         { message: "User with this email already exists." },
         { status: 400 }
       );
     }
 
-    // Password hash
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Naya user
-    const newUser = new User({
+    const newUser = await User.create({
       fullName,
       email,
       password: hashedPassword,
     });
-    await newUser.save();
 
-    // JWT token
-    const token = jwt.sign({ id: newUser._id }, process.env.TOKEN_SECRET, {
-      expiresIn: "1d",
-    });
+    const token = jwt.sign({ id: newUser._id }, process.env.TOKEN_SECRET, { expiresIn: "1d" });
 
-    // Response object me user data aur cookie shamil karo.
     const response = NextResponse.json(
       {
-        message: "User registered successfully!",
+        message: "Signup successful!",
         success: true,
         user: {
           id: newUser._id,
@@ -50,22 +40,17 @@ export async function POST(req) {
       { status: 201 }
     );
 
-    // Cookie set karo.
-response.cookies.set("token", token, {
-  httpOnly: true,
-  maxAge: 60 * 60 * 24,
-  secure: process.env.NODE_ENV === "production",
-  sameSite: "none", // 🩵 add this line
-  path: "/",
-});
-
+    response.cookies.set("token", token, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+      maxAge: 60 * 60 * 24,
+      path: "/",
+    });
 
     return response;
   } catch (error) {
     console.error("Signup error:", error);
-    return NextResponse.json(
-      { message: "Something went wrong." },
-      { status: 500 }
-    );
+    return NextResponse.json({ message: "Something went wrong." }, { status: 500 });
   }
 }
