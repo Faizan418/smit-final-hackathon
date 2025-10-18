@@ -19,7 +19,7 @@ export async function POST(req) {
       return NextResponse.json({ message: "Invalid credentials." }, { status: 400 });
     }
 
-    const token = jwt.sign({ id: user._id }, process.env.TOKEN_SECRET, { expiresIn: "1d" });
+    const token = jwt.sign({ id: user._id }, process.env.NEXT_PUBLIC_TOKEN_SECRET, { expiresIn: "1d" });
 
     const response = NextResponse.json(
       {
@@ -36,8 +36,8 @@ export async function POST(req) {
 
     response.cookies.set("token", token, {
       httpOnly: true,
-      secure: true, // 🩵 always true for Vercel (HTTPS)
-      sameSite: "none", // 🩵 critical for cross-origin cookie
+      secure: true,
+      sameSite: "none",
       maxAge: 60 * 60 * 24,
       path: "/",
     });

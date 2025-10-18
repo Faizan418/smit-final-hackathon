@@ -9,7 +9,7 @@ export const connectDB = async () => {
   }
 
   try {
-    const mongoUri = process.env.MONGO_URI;
+    const mongoUri = process.env.NEXT_PUBLIC_MONGO_URI;
     if (!mongoUri) {
       throw new Error("MONGO_URI not defined in .env.local");
     }
