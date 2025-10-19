@@ -23,3 +23,6 @@ export const connectDB = async () => {
     process.exit(1);
   }
 };
+
+// 👇 Add this line at the end
+export default connectDB;
