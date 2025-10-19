@@ -6,4 +6,5 @@ const aiInsightSchema = new mongoose.Schema({
   urduSummary: String,
 });
 
-export default mongoose.models.AiInsight || mongoose.model("AiInsight", aiInsightSchema);
+export default mongoose.models.AiInsight ||
+  mongoose.model("AiInsight", aiInsightSchema);

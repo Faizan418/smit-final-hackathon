@@ -15,7 +15,7 @@ export default function HomePage() {
 
         <p className="text-base sm:text-lg md:text-xl max-w-2xl mx-auto text-gray-600">
           Your personal health assistant that helps you upload, analyze, and
-          understand your medical reports using AI.  
+          understand your medical reports using AI.
           <br />
           <span className="font-semibold">Smart, Secure, and Simple.</span>
         </p>
@@ -88,7 +88,7 @@ export default function HomePage() {
           </Link>
         </div>
       </section>
-      <Logout/>
+      <Logout />
     </div>
   );
 }

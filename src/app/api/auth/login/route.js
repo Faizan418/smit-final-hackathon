@@ -11,15 +11,23 @@ export async function POST(req) {
 
     const user = await User.findOne({ email });
     if (!user) {
-      return NextResponse.json({ message: "Invalid credentials." }, { status: 400 });
+      return NextResponse.json(
+        { message: "Invalid credentials." },
+        { status: 400 }
+      );
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return NextResponse.json({ message: "Invalid credentials." }, { status: 400 });
+      return NextResponse.json(
+        { message: "Invalid credentials." },
+        { status: 400 }
+      );
     }
 
-    const token = jwt.sign({ id: user._id }, process.env.NEXT_PUBLIC_TOKEN_SECRET, { expiresIn: "1d" });
+    const token = jwt.sign({ id: user._id }, process.env.TOKEN_SECRET, {
+      expiresIn: "1d",
+    });
 
     const response = NextResponse.json(
       {
@@ -45,6 +53,9 @@ export async function POST(req) {
     return response;
   } catch (error) {
     console.error("Login error:", error);
-    return NextResponse.json({ message: "Something went wrong." }, { status: 500 });
+    return NextResponse.json(
+      { message: "Something went wrong." },
+      { status: 500 }
+    );
   }
 }

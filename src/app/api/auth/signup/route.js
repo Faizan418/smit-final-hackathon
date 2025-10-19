@@ -25,7 +25,7 @@ export async function POST(req) {
       password: hashedPassword,
     });
 
-    const token = jwt.sign({ id: newUser._id }, process.env.NEXT_PUBLIC_TOKEN_SECRET, { expiresIn: "1d" });
+    const token = jwt.sign({ id: newUser._id }, process.env.TOKEN_SECRET, { expiresIn: "1d" });
 
     const response = NextResponse.json(
       {

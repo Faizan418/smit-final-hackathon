@@ -9,7 +9,7 @@ export default function UploadPage() {
   const [file, setFile] = useState(null);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-  const [analysis, setAnalysis] = useState(""); // AI summary
+  const [analysis, setAnalysis] = useState("");
 
   const handleUpload = async () => {
     if (!file) {
@@ -22,7 +22,7 @@ export default function UploadPage() {
     setAnalysis("");
 
     try {
-      // 1. Upload file to backend (Cloudinary + MongoDB)
+
       const formData = new FormData();
       formData.append("file", file);
       const uploadRes = await axios.post("/api/upload", formData);
@@ -32,7 +32,6 @@ export default function UploadPage() {
         throw new Error("Upload succeeded but no file URL returned.");
       }
 
-      // 2. Call Gemini API for summary/analysis
       const prompt = `Here is a medical report uploaded at URL: ${fileUrl}. Please read it and provide a simple English summary and Roman Urdu explanation.`;
       const aiRes = await axios.post("/api/analyze", { prompt });
 

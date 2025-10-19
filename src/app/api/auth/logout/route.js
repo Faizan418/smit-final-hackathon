@@ -6,7 +6,7 @@ export async function GET() {
       message: "Logout successful!",
       success: true,
     });
-    // Cookie ko clear ya expire karo.
+
     response.cookies.set("token", "", {
       httpOnly: true,
       expires: new Date(0),

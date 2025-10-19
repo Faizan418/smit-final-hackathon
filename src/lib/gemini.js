@@ -1,7 +1,8 @@
-// pseudo code — adapt to the official Gemini Node client you will use
 import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const client = new GoogleGenerativeAI({ apiKey: process.env.NEXT_PUBLIC_GEMINI_API_KEY });
+const client = new GoogleGenerativeAI({
+  apiKey: process.env.GEMINI_API_KEY,
+});
 
 export async function analyzeFile(fileUrl) {
   const prompt = `

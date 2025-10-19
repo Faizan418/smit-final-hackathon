@@ -26,9 +26,8 @@ export default function Dashboard() {
     <div className="min-h-screen bg-gray-950 text-gray-100">
       <Navbar />
 
-      {/* Main Container */}
       <div className="max-w-6xl mx-auto p-6 md:p-10 space-y-10">
-        {/* Header */}
+
         <header className="text-center space-y-2">
           <h1 className="text-3xl sm:text-4xl font-bold text-green-400">
             🩺 Health Dashboard
@@ -38,7 +37,6 @@ export default function Dashboard() {
           </p>
         </header>
 
-        {/* Reports Section */}
         <section>
           <h2 className="text-2xl font-semibold mb-6 text-green-300 flex items-center gap-2">
             📁 Uploaded Reports
@@ -74,10 +72,8 @@ export default function Dashboard() {
           )}
         </section>
 
-        {/* Divider Line */}
         <div className="border-t border-gray-800"></div>
 
-        {/* Vitals Section */}
         <section>
           <h2 className="text-2xl font-semibold mb-6 text-green-300 flex items-center gap-2">
             📊 Manual Vitals

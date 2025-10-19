@@ -17,7 +17,9 @@ export default function ViewReportPage() {
     const res = await axios.get(`/api/upload?id=${id}`);
     setReport(res.data?.data);
 
-    const aiRes = await axios.post("/api/analyze", { fileUrl: res.data?.data?.url });
+    const aiRes = await axios.post("/api/analyze", {
+      fileUrl: res.data?.data?.url,
+    });
     setAi(aiRes.data?.data);
   };
 
@@ -28,7 +30,11 @@ export default function ViewReportPage() {
       {report && (
         <div className="bg-white shadow-md p-4 rounded-lg">
           <h2 className="font-semibold text-lg">{report.name}</h2>
-          <a href={report.url} className="text-blue-600 underline" target="_blank">
+          <a
+            href={report.url}
+            className="text-blue-600 underline"
+            target="_blank"
+          >
             Open Original Report
           </a>
         </div>

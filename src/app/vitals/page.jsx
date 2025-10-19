@@ -38,15 +38,13 @@ export default function VitalsPage() {
     <div className="min-h-screen bg-gray-950 text-gray-100 flex flex-col">
       <Navbar />
 
-      {/* Main Content */}
       <main className="flex-grow flex justify-center items-center px-4 py-16">
         <div className="bg-gray-900 border border-gray-800 shadow-xl rounded-2xl p-8 w-full max-w-lg text-center transform transition hover:scale-[1.01]">
-          {/* Icon */}
+
           <div className="flex justify-center mb-4">
             <Activity className="w-12 h-12 text-green-500 animate-pulse" />
           </div>
 
-          {/* Title */}
           <h2 className="text-3xl font-bold text-green-400 mb-2">
             Add Your Health Vitals
           </h2>
@@ -57,7 +55,6 @@ export default function VitalsPage() {
             health.
           </p>
 
-          {/* Form */}
           <form onSubmit={handleSubmit} className="space-y-4 text-left">
             {["bp", "sugar", "weight"].map((f) => (
               <div key={f}>
@@ -79,7 +76,6 @@ export default function VitalsPage() {
               </div>
             ))}
 
-            {/* Notes Field */}
             <div>
               <label
                 htmlFor="notes"
@@ -97,8 +93,6 @@ export default function VitalsPage() {
                 rows={3}
               />
             </div>
-
-            {/* Button */}
             <button
               type="submit"
               disabled={loading}
@@ -112,7 +106,6 @@ export default function VitalsPage() {
             </button>
           </form>
 
-          {/* Message */}
           {message && (
             <p
               className={`mt-4 text-sm text-center ${
@@ -123,7 +116,6 @@ export default function VitalsPage() {
             </p>
           )}
 
-          {/* Info Note */}
           <p className="text-xs text-gray-500 mt-6 text-center">
             📊 You can view all your saved vitals in the{" "}
             <span className="text-green-400">Dashboard</span>.
