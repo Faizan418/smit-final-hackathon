@@ -1,27 +1,61 @@
 import { NextResponse } from "next/server";
-import cloudinary from "@/lib/cloudinary";
+import { v2 as cloudinary } from "cloudinary";
 import connectDB from "@/database/db";
-import File from "@/models/fileModel";
+import Report from "@/models/fileModel";
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 export async function POST(req) {
   try {
     await connectDB();
+
     const formData = await req.formData();
     const file = formData.get("file");
-    const arrayBuffer = await file.arrayBuffer();
-    const buffer = Buffer.from(arrayBuffer);
 
-    const uploadResponse = await cloudinary.uploader.upload_stream(
-      { resource_type: "auto" },
-      async (error, result) => {
-        if (error) throw error;
-        const newFile = await File.create({ url: result.secure_url, name: file.name });
-        return NextResponse.json({ success: true, data: newFile });
-      }
-    );
-    uploadResponse.end(buffer);
+    if (!file) {
+      return NextResponse.json(
+        { success: false, message: "No file uploaded" },
+        { status: 400 }
+      );
+    }
+
+    // convert file to buffer
+    const bytes = await file.arrayBuffer();
+    const buffer = Buffer.from(bytes);
+
+    // upload to Cloudinary
+    const uploadRes = await new Promise((resolve, reject) => {
+      cloudinary.uploader
+        .upload_stream({ folder: "healthmate_reports" }, (error, result) => {
+          if (error) reject(error);
+          else resolve(result);
+        })
+        .end(buffer);
+    });
+
+    // save to MongoDB
+    const report = new Report({
+      name: file.name,
+      url: uploadRes.secure_url,
+      date: new Date(),
+    });
+    await report.save();
+
+    // ✅ Proper success response
+    return NextResponse.json({
+      success: true,
+      message: "File uploaded successfully",
+      data: report,
+    });
   } catch (error) {
-    console.error(error);
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+    console.error("Upload API Error:", error);
+    return NextResponse.json(
+      { success: false, message: error.message },
+      { status: 500 }
+    );
   }
 }

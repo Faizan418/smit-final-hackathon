@@ -1,37 +1,31 @@
 import { NextResponse } from "next/server";
-import connectDB from "@/database/db";
-import AiInsight from "@/models/AiInsight";
+import { GoogleGenerativeAI } from "@google/generative-ai";
+
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 export async function POST(req) {
-  await connectDB();
-  const { fileUrl } = await req.json();
+  try {
+    const { prompt } = await req.json();
 
-  const prompt = `
-  You are a medical assistant. Read the report from this URL: ${fileUrl}
-  Summarize it in:
-  1. Simple English
-  2. Roman Urdu
-  `;
-
-  const response = await fetch(
-    "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" +
-      process.env.GEMINI_API_KEY,
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] }),
+    if (!prompt) {
+      return NextResponse.json(
+        { success: false, message: "Prompt is missing" },
+        { status: 400 }
+      );
     }
-  );
 
-  const data = await response.json();
-  const text = data.candidates?.[0]?.content?.parts?.[0]?.text || "";
+    // ✅ Correct model name for v1 API
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-latest" });
 
-  const [englishSummary, urduSummary] = text.split("Roman Urdu:");
+    const result = await model.generateContent(prompt);
+    const text = result.response.text();
 
-  const insight = await AiInsight.create({
-    englishSummary,
-    urduSummary,
-  });
-
-  return NextResponse.json({ success: true, data: insight });
+    return NextResponse.json({ success: true, data: text });
+  } catch (error) {
+    console.error("Gemini API Error:", error);
+    return NextResponse.json(
+      { success: false, message: error.message },
+      { status: 500 }
+    );
+  }
 }

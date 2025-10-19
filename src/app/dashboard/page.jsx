@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
 
 export default function Dashboard() {
   const [reports, setReports] = useState([]);
@@ -100,7 +99,8 @@ export default function Dashboard() {
                   </h3>
                   <p className="text-gray-400 mt-1 text-sm">
                     <span className="text-green-400">BP:</span> {v.bp} <br />
-                    <span className="text-green-400">Sugar:</span> {v.sugar} <br />
+                    <span className="text-green-400">Sugar:</span> {v.sugar}{" "}
+                    <br />
                     <span className="text-green-400">Weight:</span> {v.weight}
                   </p>
                   {v.notes && (
@@ -114,7 +114,6 @@ export default function Dashboard() {
           )}
         </section>
       </div>
-      <Footer/>
     </div>
   );
 }

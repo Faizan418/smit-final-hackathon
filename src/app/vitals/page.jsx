@@ -2,11 +2,15 @@
 import { useState } from "react";
 import axios from "axios";
 import Navbar from "../components/Navbar";
-import Footer from "../components/Footer";
 import { Activity } from "lucide-react";
 
 export default function VitalsPage() {
-  const [form, setForm] = useState({ bp: "", sugar: "", weight: "", notes: "" });
+  const [form, setForm] = useState({
+    bp: "",
+    sugar: "",
+    weight: "",
+    notes: "",
+  });
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -49,7 +53,8 @@ export default function VitalsPage() {
           <p className="text-gray-400 mb-6 text-sm sm:text-base">
             Record your daily <span className="text-green-300">BP</span>,{" "}
             <span className="text-green-300">Sugar</span>, and{" "}
-            <span className="text-green-300">Weight</span> to monitor your health.
+            <span className="text-green-300">Weight</span> to monitor your
+            health.
           </p>
 
           {/* Form */}
@@ -111,9 +116,7 @@ export default function VitalsPage() {
           {message && (
             <p
               className={`mt-4 text-sm text-center ${
-                message.includes("✅")
-                  ? "text-green-400"
-                  : "text-red-400"
+                message.includes("✅") ? "text-green-400" : "text-red-400"
               }`}
             >
               {message}
@@ -127,8 +130,6 @@ export default function VitalsPage() {
           </p>
         </div>
       </main>
-
-      <Footer />
     </div>
   );
 }

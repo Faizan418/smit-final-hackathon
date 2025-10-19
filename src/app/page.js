@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Navbar from "./components/Navbar";
+import Logout from "./components/Logout";
 
 export default function HomePage() {
   return (
@@ -87,6 +88,7 @@ export default function HomePage() {
           </Link>
         </div>
       </section>
+      <Logout/>
     </div>
   );
 }
