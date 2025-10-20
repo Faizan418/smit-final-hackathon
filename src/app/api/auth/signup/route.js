@@ -44,9 +44,10 @@ export async function POST(req) {
       httpOnly: true,
       secure: true,
       sameSite: "none",
-      maxAge: 60 * 60 * 24,
       path: "/",
+      maxAge: 60 * 60 * 24 * 7, // 7 days
     });
+
 
     return response;
   } catch (error) {
