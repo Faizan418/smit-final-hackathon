@@ -7,6 +7,7 @@ import jwt from "jsonwebtoken";
 export async function POST(req) {
   try {
     await connectDB();
+
     const { fullName, email, password } = await req.json();
 
     const existingUser = await User.findOne({ email });
@@ -25,12 +26,15 @@ export async function POST(req) {
       password: hashedPassword,
     });
 
-    const token = jwt.sign({ id: newUser._id }, process.env.TOKEN_SECRET, { expiresIn: "1d" });
+    const token = jwt.sign(
+      { id: newUser._id, email: newUser.email },
+      process.env.TOKEN_SECRET,
+      { expiresIn: "7d" }
+    );
 
     const response = NextResponse.json(
       {
         message: "Signup successful!",
-        success: true,
         user: {
           id: newUser._id,
           fullName: newUser.fullName,
@@ -42,16 +46,17 @@ export async function POST(req) {
 
     response.cookies.set("token", token, {
       httpOnly: true,
-      secure: true,
-      sameSite: "none",
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
       path: "/",
-      maxAge: 60 * 60 * 24 * 7, // 7 days
     });
-
 
     return response;
   } catch (error) {
-    console.error("Signup error:", error);
-    return NextResponse.json({ message: "Something went wrong." }, { status: 500 });
+    console.error("Signup Error:", error);
+    return NextResponse.json(
+      { message: "Internal Server Error", error: error.message },
+      { status: 500 }
+    );
   }
 }
